@@ -1,0 +1,18 @@
+Numpaar Expansions by DebugIto
+==============================
+
+This repository provides various expansions (engines and scripts) used in Numpaar_.
+
+.. _Numpaar: https://github.com/debug-ito/numpaar
+
+The expansions are totally for my personal use for now...
+
+
+Author
+------
+
+- Toshio ITO
+- debug.ito [at] gmail.com
+
+
+
