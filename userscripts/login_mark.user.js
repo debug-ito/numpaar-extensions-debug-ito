@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name          Google Account Marked
+// @name          Login Page Marked
 // @namespace     http://debugitos.main.jp/
-// @description   Mark Google account
+// @description   Mark login pages
 // @include       https://accounts.google.com/ServiceLogin*
 // ==/UserScript==
 
-document.title = "[GOOGLE ACCOUNT] " + document.title;
+document.title = "[LOGIN] " + document.title;
 
 
