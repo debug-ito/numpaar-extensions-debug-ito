@@ -97,17 +97,19 @@ sub handlerReaderNavi_right {
     return 0;
 }
 
-sub handlerReaderNavi_home {
+sub handlerReaderNavi_page_up {
     my ($self, $want_help) = @_;
     return "All items" if defined($want_help);
     $self->getConnection()->comKeyType('ga');
+    $self->setState('Extended');
     return 0;
 }
 
-sub handlerReaderNavi_left {
+sub handlerReaderNavi_page_down {
     my ($self, $want_help) = @_;
     return "Starred items" if defined($want_help);
     $self->getConnection()->comKeyType('gs');
+    $self->setState('Extended');
     return 0;
 }
 
@@ -118,7 +120,7 @@ sub handlerReaderNavi_center {
     return 0;
 }
 
-sub handlerReaderNavi_page_up {
+sub handlerReaderNavi_home {
     my ($self, $want_help) = @_;
     return "Refresh" if defined($want_help);
     $self->getConnection()->comKeyString('r');
