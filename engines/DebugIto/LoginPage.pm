@@ -1,12 +1,13 @@
 package Numpaar::Engine::DebugIto::LoginPage;
 use base 'Numpaar::Engine::DebugIto::Firefox';
-use Numpaar::Config qw(configElement);
+use Numpaar::Config qw(configElement configCheck);
 
 use strict;
 use warnings;
 
 sub new {
     my ($class, $user_name, $secret_filepath) = @_;
+    &configCheck('extern_program', 'zenity', 'gpg');
     my $self = $class->setupBasic('^Navigator\.Firefox \[LOGIN\]');
     $self->{account_name} = $user_name;
     $self->{secret_file} = $secret_filepath;
@@ -42,11 +43,24 @@ sub handlerExtended_down {
     my ($self, $want_help) = @_;
     my $connection = $self->getConnection();
     return 'Password' if defined($want_help);
-    my $secret_loader = sprintf('%s "%s"', &configElement('extern_program', 'secret_loader'), $self->{secret_file});
-    my $secret = `$secret_loader`;
+    if(! -f $self->{secret_file}) {
+        printf STDERR ("ERROR: LoginPage: cannot find %s\n", $self->{secret_file});
+        $self->setState(0);
+        return 1;
+    }
+    my $zen_command = sprintf('%s --entry --title "Password required" --text "Enter password" --hide-text', &configElement('extern_program', 'zenity'));
+    my $password = `$zen_command`;
+    chomp $password;
+    if($password eq '') {
+        printf STDERR "ERROR: LoginPage: no password is given.\n";
+        $self->setState(0);
+        return 1;
+    }
+    my $gpg_command = sprintf('%s --passphrase "%s" -d "%s"', &configElement('extern_program', 'gpg'), $password, $self->{secret_file});
+    my $secret = `$gpg_command`;
     chomp $secret;
     if($secret eq '') {
-        print STDERR "ERROR: LoginPage: secret loader error.\n";
+        print STDERR "ERROR: LoginPage: gpg error.\n";
         $self->setState(0);
         return 0;
     }
