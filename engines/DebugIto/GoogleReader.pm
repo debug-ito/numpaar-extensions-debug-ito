@@ -52,6 +52,7 @@ sub handlerExtended_right {
     return "View original" if defined($want_help);
     $self->getConnection()->comKeyString('v');
     $self->updateLoad();
+    $self->setState(0);
     return 0;
 }
 
