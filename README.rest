@@ -1,11 +1,11 @@
-Numpaar Expansions by DebugIto
+Numpaar Extensions by DebugIto
 ==============================
 
-This repository provides various expansions (engines and scripts) used in Numpaar_.
+This repository provides various extensions (engines and scripts) used in Numpaar_.
 
 .. _Numpaar: https://github.com/debug-ito/numpaar
 
-The expansions are totally for my personal use for now...
+The extensions are totally for my personal use for now...
 
 
 Author
