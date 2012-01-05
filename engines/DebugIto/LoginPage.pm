@@ -9,8 +9,8 @@ sub new {
     my ($class, $user_name, $secret_filepath) = @_;
     &configCheck('extern_program', 'zenity', 'gpg');
     my $self = $class->setupBasic('^Navigator\.Firefox \[LOGIN\]');
-    $self->{account_name} = $user_name;
-    $self->{secret_file} = $secret_filepath;
+    $self->heap->{account_name} = $user_name;
+    $self->heap->{secret_file} = $secret_filepath;
     return $self;
 }
 
@@ -28,7 +28,7 @@ sub handlerExtended_center {
     my ($self, $want_help) = @_;
     my $connection = $self->getConnection();
     return 'User name' if defined($want_help);
-    $connection->comKeyType($self->{account_name});
+    $connection->comKeyType($self->heap->{account_name});
     return 0;
 }
 
@@ -43,8 +43,8 @@ sub handlerExtended_down {
     my ($self, $want_help) = @_;
     my $connection = $self->getConnection();
     return 'Password' if defined($want_help);
-    if(! -f $self->{secret_file}) {
-        printf STDERR ("ERROR: LoginPage: cannot find %s\n", $self->{secret_file});
+    if(! -f $self->heap->{secret_file}) {
+        printf STDERR ("ERROR: LoginPage: cannot find %s\n", $self->heap->{secret_file});
         $self->setState(0);
         return 1;
     }
@@ -56,7 +56,7 @@ sub handlerExtended_down {
         $self->setState(0);
         return 1;
     }
-    my $gpg_command = sprintf('%s --passphrase "%s" -d "%s"', &configElement('extern_program', 'gpg'), $password, $self->{secret_file});
+    my $gpg_command = sprintf('%s --passphrase "%s" -d "%s"', &configElement('extern_program', 'gpg'), $password, $self->heap->{secret_file});
     my $secret = `$gpg_command`;
     chomp $secret;
     if($secret eq '') {
