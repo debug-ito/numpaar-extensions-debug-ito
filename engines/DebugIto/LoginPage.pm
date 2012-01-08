@@ -1,6 +1,6 @@
 package Numpaar::Engine::DebugIto::LoginPage;
 use base 'Numpaar::Engine::DebugIto::Firefox';
-use Numpaar::Config qw(configElement configCheck);
+use Numpaar::Config qw(configGet configCheck);
 
 use strict;
 use warnings;
@@ -48,7 +48,7 @@ sub handlerExtended_down {
         $self->setState(0);
         return 1;
     }
-    my $zen_command = sprintf('%s --entry --title "Password required" --text "Enter password" --hide-text', &configElement('extern_program', 'zenity'));
+    my $zen_command = sprintf('%s --entry --title "Password required" --text "Enter password" --hide-text', &configGet('extern_program', 'zenity'));
     my $password = `$zen_command`;
     chomp $password;
     if($password eq '') {
@@ -56,7 +56,7 @@ sub handlerExtended_down {
         $self->setState(0);
         return 1;
     }
-    my $gpg_command = sprintf('%s --passphrase "%s" -d "%s"', &configElement('extern_program', 'gpg'), $password, $self->heap->{secret_file});
+    my $gpg_command = sprintf('%s --passphrase "%s" -d "%s"', &configGet('extern_program', 'gpg'), $password, $self->heap->{secret_file});
     my $secret = `$gpg_command`;
     chomp $secret;
     if($secret eq '') {
